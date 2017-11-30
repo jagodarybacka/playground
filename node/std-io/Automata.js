@@ -8,10 +8,14 @@ class Automata {
   }
 
   route(from, to, char) {
-    if (!this.transitions[from]) {
-      this.transitions.push({[char]: to})
-    } else if (!this.transitions[from][char]){
-      this.transitions[from][char] = to;
+    if(!to) {
+      this.accepting.push(from);
+    } else {
+      if (!this.transitions[from]) {
+        this.transitions.push({[char]: to})
+      } else if (!this.transitions[from][char]){
+        this.transitions[from][char] = to;
+      }
     }
   }
 }
