@@ -9,31 +9,34 @@ const rl = readline.createInterface({
   terminal: false
 })
 
-let autInput;
-let autTransitions = [];
-
-new Promise(
-  (resolve, reject) => {
-    const aut = new Automata()
-    readInputFile()
-      .then(res => {
-        // BUG: my node ver is dumb and has problem with spread syntax - get update asap
-        return res.map((el) => aut.route(el[0], el[1], el[2]))
-      })
-      .then(readArgvFile)
-      .then(data => data.split('\n'))
-      .then(res => console.log(res))
-  }
-)
-
+function app() {
+  return new Promise(
+    (resolve, reject) => {
+      const aut = new Automata()
+      readInputFile()
+        .then(res => {
+          // BUG: my node ver is dumb and has problem with spread syntax - get update asap
+          return res.map((el) => aut.route(el[0], el[1], el[2]))
+        })
+        .then(readArgvFile)
+        .then(data => data.split('\n'))
+        .then(res => {
+          // console.log(aut);
+          resolve({words: res, aut})
+        })
+    }
+  )
+}
 
 function readInputFile() {
   return new Promise(
       (resolve, reject) => {
         let arr = []
         rl.on('line', line => {
-          arr.push(line.split(' '))
-          resolve(arr)
+          if (line[0] !== "#") {
+            arr.push(line.split(' '))
+            resolve(arr)
+          }
         })
     }
   )
@@ -52,3 +55,10 @@ function readArgvFile() {
         })
     })
 }
+
+app()
+  .then(res => {
+    console.log(res.aut);
+    console.log(res.aut.check("abc"));
+    // let responses = res.words.map(res.aut.check(str));
+  });

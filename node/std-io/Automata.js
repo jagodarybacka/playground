@@ -18,6 +18,23 @@ class Automata {
       }
     }
   }
+  // FIXME: not working at all
+  check(str) {
+    for (let v of str) {
+      console.log(v, this.state);
+      // if transition from exist set state
+      // console.log(this.accepting.includes(this.state.toString()));
+      if (this.transitions[this.state][v]) {
+        this.state = this.transitions[this.state][v]
+      } else if (this.accepting.includes(this.state.toString())){
+        // if transition doesnt exist try accepting
+        return true;
+      } else {
+        return false;
+      }
+    }
+    return false
+  }
 }
 
 module.exports = Automata
