@@ -16,12 +16,11 @@ function app() {
       readInputFile()
         .then(res => {
           // BUG: my node ver is dumb and has problem with spread syntax - get update asap
-          return res.map((el) => aut.route(el[0], el[1], el[2]))
+            return res.map((el) => aut.route(el[0], el[1], el[2]))
         })
         .then(readArgvFile)
         .then(data => data.split('\n'))
         .then(res => {
-          // console.log(aut);
           resolve({words: res, aut})
         })
     }
@@ -58,7 +57,9 @@ function readArgvFile() {
 
 app()
   .then(res => {
-    console.log(res.aut);
-    console.log(res.aut.check("abc"));
-    // let responses = res.words.map(res.aut.check(str));
+    res.words.forEach((str) => {
+        if (str.length > 0) {
+          console.log(res.aut.check(str) ? 'YES' : 'NO', str)
+        }
+    });
   });

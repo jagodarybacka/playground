@@ -7,33 +7,42 @@ class Automata {
     this.accepting = [];
   }
 
+  resetState() {
+    this.state = 0;
+  }
+
   route(from, to, char) {
     if(!to) {
+      if (!this.transitions[from]) {
+        this.transitions[from] = {};
+      }
       this.accepting.push(from);
     } else {
       if (!this.transitions[from]) {
-        this.transitions.push({[char]: to})
+        this.transitions[from] = {[char]: to}
       } else if (!this.transitions[from][char]){
         this.transitions[from][char] = to;
       }
     }
   }
-  // FIXME: not working at all
+
   check(str) {
     for (let v of str) {
-      console.log(v, this.state);
-      // if transition from exist set state
-      // console.log(this.accepting.includes(this.state.toString()));
       if (this.transitions[this.state][v]) {
         this.state = this.transitions[this.state][v]
-      } else if (this.accepting.includes(this.state.toString())){
-        // if transition doesnt exist try accepting
-        return true;
       } else {
-        return false;
+          this.resetState()
+          return false
       }
     }
-    return false
+
+    if (this.accepting.indexOf(this.state.toString()) >= 0) {
+        this.resetState()
+        return true
+    } else {
+      this.resetState()
+      return false
+    }
   }
 }
 
