@@ -56,10 +56,15 @@ function readArgvFile() {
 
 app()
   .then(res => {
-    console.log(res.aut.transitions);
-    // res.words.forEach((str) => {
-    //     if (str.length > 0) {
-    //       console.log(res.aut.check(str) ? 'YES' : 'NO', str)
-    //     }
-    // });
+    // console.log(res.aut.transitions);
+    // res.aut.check('a')
+    res.words.forEach((str) => {
+        if (str.length > 0) {
+          console.log(res.aut.check(str) ? 'YES' : 'NO', str)
+          // console.log('\n\n');
+        }
+    });
+  })
+  .catch((err) => {
+    console.log(err);
   });

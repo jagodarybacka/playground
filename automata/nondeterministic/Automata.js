@@ -2,13 +2,8 @@
 
 class Automata {
   constructor() {
-    this.state = 0;
     this.transitions = [];
     this.accepting = [];
-  }
-
-  resetState() {
-    this.state = 0;
   }
 
   route(from, to, char) {
@@ -29,24 +24,37 @@ class Automata {
     }
   }
 
-  check(str) {
-    for (let v of str) {
-      if (this.transitions[this.state][v]) {
-        this.state = this.transitions[this.state][v]
+  reqCheck(str, state) {
+    if (str.length) {
+      let s = str[0]
+      if (this.transitions[state][s]) {
+        let statesArray = this.transitions[state][s];
+        str = str.slice(1);
+
+        for (let st of statesArray) {
+          st = st.toString();
+          if (this.reqCheck(str, st)) {
+            return true;
+          }
+        }
+        return false;
       } else {
-          this.resetState()
-          return false
+        return false
+      }
+    } else {
+      if (this.accepting.indexOf(state.toString()) >= 0) {
+          return true;
+      } else {
+        return false;
       }
     }
-
-    if (this.accepting.indexOf(this.state.toString()) >= 0) {
-        this.resetState()
-        return true
-    } else {
-      this.resetState()
-      return false
-    }
   }
+
+  check(str) {
+    let state = 0;
+    return this.reqCheck(str, state);
+  }
+
 }
 
-module.exports = Automata
+module.exports = Automata;
